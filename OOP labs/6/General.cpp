@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS // To use ctime()
+
 #include "General.h"
 
 

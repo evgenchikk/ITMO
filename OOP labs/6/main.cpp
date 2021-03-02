@@ -1,5 +1,4 @@
-#include "UI.h"
-
+#include "Controller.h"
 
 int main() {
   EmployeeList employeeList;
@@ -10,9 +9,9 @@ int main() {
   employeeList.addEmployee(3, "Valeria", 2);
   employeeList.addEmployee(4, "Anastasia", 1);
   
-  UI ui(&employeeList, &taskList, &reportList);
+  Controller ui(&employeeList, &taskList, &reportList);
   ui.mainMenu();
-  
+    
   return 0;
 }
 

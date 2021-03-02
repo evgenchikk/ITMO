@@ -1,34 +1,33 @@
 #pragma once
 
 #include "Task.h"
-#include "SprintReport.h"
-
+#include "SprintDraft.h"
 
 class Employee {
-    size_t ID;
+    size_t Id;
     std::string name;
     Employee *manager;
     std::vector<Employee *> subordinates;
 
     Report *dailyReport;
-    SprintReport *sprintReport;
+    SprintDraft *sprintDraft;
 
     void addSubordinate(Employee *subordinate);
 
     void removeSubordinate(Employee *subordinate);
 
-    static std::vector<size_t> getAllSubordinatesID(Employee *cur);
+    static std::vector<size_t> getAllSubordinatesId(Employee *cur);
 
 public:
-    Employee(size_t _ID, std::string _name, Employee *_manager = nullptr);
+    Employee(size_t _Id, std::string _name, Employee *_manager = nullptr);
 
     void setManager(Employee *newManager);
 
     void startNewDailyReport();
 
-    void startNewSprintReport();
+    void startNewSprintDraft();
 
-    size_t getID();
+    size_t getId();
 
     const std::string &getName();
 
@@ -38,7 +37,7 @@ public:
 
     Report *getDailyReport();
 
-    SprintReport *getSprintReport();
+    SprintDraft *getSprintDraft();
 
-    std::vector<size_t> getAllSubordinatesID();
+    std::vector<size_t> getAllSubordinatesId();
 };

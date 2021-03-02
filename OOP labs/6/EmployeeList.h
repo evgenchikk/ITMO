@@ -1,25 +1,24 @@
 #pragma once
 
-#include "Employee.h"
-
+#include "TeamleadWrapper.h"
 
 class EmployeeList {
-    Employee *leader = nullptr;
+    TeamleadWrapper teamlead;
 
-    static Employee *getEmployee(size_t ID, Employee *cur);
+    static Employee *getEmployee(size_t Id, Employee *cur);
 
     static Employee *getEmployee(std::string name, Employee *cur);
 
-    void print(Employee *cur, int space);
+    void setTeamlead(Employee *newTeamlead);
 
 public:
-    bool addEmployee(size_t ID, std::string name, int managerID);
+    bool addEmployee(size_t Id, std::string name, int managerId);
 
-    bool setManager(size_t employeeID, int managerID);
+    bool setManager(size_t employeeId, int managerId);
 
-    Employee *getEmployee(size_t ID);
+    Employee *getEmployee(size_t Id);
 
     Employee *getEmployee(std::string name);
 
-    void print();
+    TeamleadWrapper &getTeamlead();
 };

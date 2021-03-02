@@ -1,114 +1,81 @@
 #include "TaskList.h"
-#include <iostream>
 #include <algorithm>
-#include "General.h"
 
-
-bool TaskList::IDComparator(Task *left, Task *right) {
-    return left->getID() < right->getID();
+bool TaskList::IdComparator(Task *left, Task *right) {
+    return left->getId() < right->getId();
 }
-
 
 bool TaskList::creationTimeComparator(Task *left, Task *right) {
     return left->getCreationTime() < right->getCreationTime();
 }
 
-
 bool TaskList::lastChangeTimeComparator(Task *left, Task *right) {
     return left->getLastChangeTime() < right->getLastChangeTime();
 }
 
-
-void TaskList::print(std::vector<Task *> list, PrintType printType) {
-    for (size_t i = 0; i < list.size(); ++i) {
-        if (printType == PrintType::CreationDate)
-            std::cout << "Creation Date: " << getDateString(list[i]->getCreationTime());
-        else if (printType == PrintType::LastChangeDate)
-            std::cout << "Last Change Date: " << getDateString(list[i]->getLastChangeTime());
-        std::cout << "ID: " << list[i]->getID() << std::endl;
-        std::cout << "Name: " << list[i]->getName() << std::endl;
-        if (list[i]->getEmployeeID() < 0)
-            std::cout << "Employee: None" << std::endl;
-        else
-            std::cout << "Employee: " << list[i]->getEmployeeID() << std::endl;
-        std::cout << "Status: " << list[i]->getStatus() << std::endl;
-        std::cout << std::endl;
-        if (i % PRINT_SIZE == PRINT_SIZE - 1) {
-            std::cout << "Show more results? (y/n)" << std::endl;
-            std::string ans;
-            getline(std::cin, ans);
-            if (ans != "y")
-                return;
-        }
-    }
-}
-
-
-bool TaskList::addTask(size_t ID, std::string name, std::string description, size_t employeeID, size_t creatorID) {
-    if (getTask(ID) != nullptr)
+bool TaskList::addTask(size_t Id, std::string name, std::string description, size_t employeeId, size_t creatorId) {
+    if (getTask(Id) != nullptr)
         return false;
-    list.push_back(new Task(ID, name, description, employeeID, creatorID));
+    list.push_back(new Task(Id, name, description, employeeId, creatorId));
     return true;
 }
 
-
-Task *TaskList::getTask(size_t ID) {
-    for (size_t i = 0; i < list.size(); ++i) {
-        if (ID == list[i]->getID())
-            return list[i];
+Task *TaskList::getTask(size_t Id) {
+    for (auto &i : list) {
+        if (Id == i->getId())
+            return i;
     }
     return nullptr;
 }
 
-
-void TaskList::printByID() {
-    std::sort(list.begin(), list.end(), IDComparator);
-    print(list, PrintType::ID);
+std::vector<Task *> *TaskList::getSortedById() {
+    auto *result = new std::vector<Task *>(list);
+    std::sort(result->begin(), result->end(), IdComparator);
+    return result;
 }
 
-
-void TaskList::printByCreationTime() {
-    std::sort(list.begin(), list.end(), creationTimeComparator);
-    print(list, PrintType::CreationDate);
+std::vector<Task *> *TaskList::getSortedByCreationTime() {
+    auto *result = new std::vector<Task *>(list);
+    std::sort(result->begin(), result->end(), creationTimeComparator);
+    return result;
 }
 
-
-void TaskList::printByLastChangeTime() {
-    std::sort(list.begin(), list.end(), lastChangeTimeComparator);
-    print(list, PrintType::LastChangeDate);
+std::vector<Task *> *TaskList::getSortedByLastChangeTime() {
+    auto *result = new std::vector<Task *>(list);
+    std::sort(result->begin(), result->end(), lastChangeTimeComparator);
+    return result;
 }
 
-
-void TaskList::printAssigned(size_t employeeID) {
-    std::vector<Task *> filteredList;
-    for (size_t i = 0; i < list.size(); ++i) {
-        if (list[i]->getEmployeeID() == employeeID)
-            filteredList.push_back(list[i]);
+std::vector<Task *> *TaskList::getAssigned(size_t employeeId) {
+    auto *filteredList = new std::vector<Task *>();
+    for (auto &i : list) {
+        if (i->getEmployeeId() == employeeId)
+            filteredList->push_back(i);
     }
-    sort(filteredList.begin(), filteredList.end(), IDComparator);
-    print(filteredList, PrintType::ID);
+    sort(filteredList->begin(), filteredList->end(), IdComparator);
+    return filteredList;
 }
 
-
-void TaskList::printEdited(size_t employeeID) {
-    std::vector<Task *> filteredList;
-    for (size_t i = 0; i < list.size(); ++i)
-        for (auto t : list[i]->getEditorsID())
-            if (t == employeeID)
-                filteredList.push_back(list[i]);
-    sort(filteredList.begin(), filteredList.end(), IDComparator);
-    print(filteredList, PrintType::ID);
+std::vector<Task *> *TaskList::getEdited(size_t employeeId) {
+    auto *filteredList = new std::vector<Task *>();
+    for (auto &i : list)
+        for (auto t : i->getEditorsId())
+            if (t == employeeId)
+                filteredList->push_back(i);
+    sort(filteredList->begin(), filteredList->end(), IdComparator);
+    return filteredList;
 }
 
-
-void TaskList::printSubordinated(std::vector<size_t> employeesID) {
-    std::vector<Task *> filteredList;
-    for (size_t i = 0; i < list.size(); ++i)
-        for (size_t j = 0; j < employeesID.size(); ++j)
-            if (list[i]->getEmployeeID() == employeesID[j]) {
-                filteredList.push_back(list[i]);
+std::vector<Task *> *TaskList::getSubordinated(const std::vector<size_t> &employeesId) {
+    auto *filteredList = new std::vector<Task *>();
+    for (auto &i : list) {
+        for (unsigned long j : employeesId) {
+            if (i->getEmployeeId() == j) {
+                filteredList->push_back(i);
                 break;
             }
-    sort(filteredList.begin(), filteredList.end(), IDComparator);
-    print(filteredList, PrintType::ID);
+        }
+    }
+    sort(filteredList->begin(), filteredList->end(), IdComparator);
+    return filteredList;
 }

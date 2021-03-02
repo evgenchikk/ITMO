@@ -1,14 +1,10 @@
 #pragma once
 
-#include "Report.h"
+#include "SprintDraft.h"
 
-
-class SprintReport : public Report {
-    std::vector<SprintReport *> subordinateReports;
+class SprintReport : public SprintDraft {
 public:
-    SprintReport(size_t _authorID);
+    SprintReport(size_t _authorId);
 
-    void addSubordinateReport(SprintReport *report);
-
-    const std::vector<SprintReport *> &getSubordinateReports();
+    bool getDraftStatus(size_t draftAuthorId);
 };

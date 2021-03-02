@@ -3,20 +3,19 @@
 #include <string>
 #include <vector>
 
-
 class Report {
-    size_t authorID;
+    size_t authorId;
     std::string text;
     std::vector<size_t> resolvedTasks;
 
 public:
-    Report(size_t _authorID);
+    Report(size_t _authorId);
 
     void addText(std::string newText);
 
-    void addTask(size_t taskID);
+    void addTask(size_t taskId);
 
-    size_t getAuthorID();
+    size_t getAuthorId();
 
     std::string getText();
 

@@ -6,15 +6,15 @@
 
 class TimedPost {
     std::string text;
-    size_t authorID;
+    size_t authorId;
     time_t postTime;
 
 public:
-    TimedPost(std::string _text, size_t _authorID);
+    TimedPost(std::string _text, size_t _authorId);
 
     const std::string &getText();
 
-    size_t getAuthorID();
+    size_t getAuthorId();
 
     time_t getTime();
 };

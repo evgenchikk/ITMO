@@ -1,6 +1,5 @@
 #include "Task.h"
 
-
 std::string Task::statusString() {
     switch (status) {
         case Status::Open:
@@ -13,38 +12,34 @@ std::string Task::statusString() {
     return "ERROR";
 }
 
-
-Task::Task(size_t _ID, std::string _name, std::string _description, int _employeeID, size_t creatorID) :
-        ID(_ID), name(_name), description(_description), employeeID(_employeeID), creationTime(time(nullptr)) {
-    if (employeeID != -1)
-        editorsID.insert(employeeID);
+Task::Task(size_t _Id, std::string _name, std::string _description, int _employeeId, size_t creatorId) :
+        Id(_Id), name(_name), description(_description), employeeId(_employeeId), creationTime(time(nullptr)) {
+    if (employeeId != -1)
+        editorsId.insert(employeeId);
 
     std::string historyText = "Task created";
-    history.push_back(new TimedPost(historyText, creatorID));
+    history.push_back(new TimedPost(historyText, creatorId));
 }
 
-
-void Task::addComment(std::string text, size_t editorID) {
-    comments.push_back(new TimedPost(text, employeeID));
+void Task::addComment(std::string text, size_t editorId) {
+    comments.push_back(new TimedPost(text, employeeId));
     std::string historyText = "Comment added: \"" + text + "\"";
-    history.push_back(new TimedPost(historyText, editorID));
-    editorsID.insert(editorID);
+    history.push_back(new TimedPost(historyText, editorId));
+    editorsId.insert(editorId);
 }
 
-
-void Task::assignEmployee(int newEmployeeID, size_t editorID) {
+void Task::assignEmployee(int newEmployeeId, size_t editorId) {
     std::string historyText;
-    if (newEmployeeID == -1)
-        historyText = "Unassigned task from " + std::to_string(employeeID);
+    if (newEmployeeId == -1)
+        historyText = "Unassigned task from " + std::to_string(employeeId);
     else
-        historyText = "Reassigned from " + std::to_string(employeeID) + " to " + std::to_string(newEmployeeID);
-    employeeID = newEmployeeID;
-    history.push_back(new TimedPost(historyText, editorID));
-    editorsID.insert(editorID);
+        historyText = "Reassigned from " + std::to_string(employeeId) + " to " + std::to_string(newEmployeeId);
+    employeeId = newEmployeeId;
+    history.push_back(new TimedPost(historyText, editorId));
+    editorsId.insert(editorId);
 }
 
-
-void Task::changeStatus(int newStatus, size_t editorID) {
+void Task::changeStatus(int newStatus, size_t editorId) {
     std::string historyText = "Changed status from " + statusString() + " to ";
     switch (newStatus) {
         case 1:
@@ -58,56 +53,46 @@ void Task::changeStatus(int newStatus, size_t editorID) {
             break;
     }
     historyText += statusString();
-    history.push_back(new TimedPost(historyText, editorID));
-    editorsID.insert(editorID);
+    history.push_back(new TimedPost(historyText, editorId));
+    editorsId.insert(editorId);
 }
 
-
-size_t Task::getID() {
-    return ID;
+size_t Task::getId() {
+    return Id;
 }
-
 
 const std::string &Task::getName() {
     return name;
 }
 
-
 const std::string &Task::getDescription() {
     return description;
 }
 
-
-int Task::getEmployeeID() {
-    return employeeID;
+int Task::getEmployeeId() {
+    return employeeId;
 }
-
 
 std::string Task::getStatus() {
     return statusString();
 }
 
-
 time_t Task::getCreationTime() {
     return creationTime;
 }
-
 
 time_t Task::getLastChangeTime() {
     return history[history.size() - 1]->getTime();
 }
 
-
 const std::vector<TimedPost *> &Task::getComments() {
     return comments;
 }
-
 
 const std::vector<TimedPost *> &Task::getHistory() {
     return history;
 }
 
-
-const std::set<size_t> &Task::getEditorsID() {
-    return editorsID;
+const std::set<size_t> &Task::getEditorsId() {
+    return editorsId;
 }

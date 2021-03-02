@@ -1,18 +1,15 @@
 #include "EmployeeList.h"
-#include <iostream>
 
-
-Employee *EmployeeList::getEmployee(size_t ID, Employee *cur) {
-    if (cur->getID() == ID)
+Employee *EmployeeList::getEmployee(size_t Id, Employee *cur) {
+    if (cur->getId() == Id)
         return cur;
     for (Employee *t : cur->getSubordinates()) {
-        Employee *ans = getEmployee(ID, t);
+        Employee *ans = getEmployee(Id, t);
         if (ans != nullptr)
             return ans;
     }
     return nullptr;
 }
-
 
 Employee *EmployeeList::getEmployee(std::string name, Employee *cur) {
     if (cur->getName() == name)
@@ -25,45 +22,39 @@ Employee *EmployeeList::getEmployee(std::string name, Employee *cur) {
     return nullptr;
 }
 
-
-void EmployeeList::print(Employee *cur, int space) {
-    for (int i = 0; i < space; ++i)
-        std::cout << " ";
-    std::cout << cur->getID() << " " << cur->getName() << std::endl;
-    for (Employee *t : cur->getSubordinates()) {
-        print(t, space + 2);
-    }
+void EmployeeList::setTeamlead(Employee *newTeamlead) {
+    teamlead.setEmployee(newTeamlead);
+    if (teamlead.getSprintReport() == nullptr)
+        teamlead.startNewSprintReport();
 }
 
-
-bool EmployeeList::addEmployee(size_t ID, std::string name, int managerID) {
-    if (getEmployee(ID) != nullptr)
+bool EmployeeList::addEmployee(size_t Id, std::string name, int managerId) {
+    if (getEmployee(Id) != nullptr)
         return false;
     Employee *manager = nullptr;
-    if (managerID >= 0) {
-        manager = getEmployee(managerID);
+    if (managerId >= 0) {
+        manager = getEmployee(managerId);
         if (manager == nullptr)
             return false;
     }
-    Employee *employee = new Employee(ID, name, manager);
+    auto *employee = new Employee(Id, name, manager);
     if (manager == nullptr) {
-        if (leader != nullptr) {
-            leader->setManager(employee);
+        if (teamlead.getEmployee() != nullptr) {
+            teamlead.getEmployee()->setManager(employee);
         }
-        leader = employee;
+        setTeamlead(employee);
     }
     return true;
 }
 
-
-bool EmployeeList::setManager(size_t employeeID, int managerID) {
-    Employee *employee = getEmployee(employeeID);
+bool EmployeeList::setManager(size_t employeeId, int managerId) {
+    Employee *employee = getEmployee(employeeId);
     if (employee == nullptr)
         return false;
 
     Employee *newManager = nullptr;
-    if (managerID >= 0) {
-        newManager = getEmployee(managerID);
+    if (managerId >= 0) {
+        newManager = getEmployee(managerId);
         if (newManager == nullptr)
             return false;
     }
@@ -73,30 +64,28 @@ bool EmployeeList::setManager(size_t employeeID, int managerID) {
 
     employee->setManager(newManager);
     if (newManager == nullptr) {
-        if (leader != nullptr) {
-            leader->setManager(employee);
+        if (teamlead.getEmployee() != nullptr) {
+            teamlead.getEmployee()->setManager(employee);
         }
-        leader = employee;
-    } else if (employee == leader) {
-        leader = newManager;
+        setTeamlead(employee);
+    } else if (employee == teamlead.getEmployee()) {
+        setTeamlead(newManager);
     }
     return true;
 }
 
-
-Employee *EmployeeList::getEmployee(size_t ID) {
-    if (leader == nullptr)
+Employee *EmployeeList::getEmployee(size_t Id) {
+    if (teamlead.getEmployee() == nullptr)
         return nullptr;
-    return getEmployee(ID, leader);
+    return getEmployee(Id, teamlead.getEmployee());
 }
-
 
 Employee *EmployeeList::getEmployee(std::string name) {
-    return getEmployee(name, leader);
+    if (teamlead.getEmployee() == nullptr)
+        return nullptr;
+    return getEmployee(name, teamlead.getEmployee());
 }
 
-
-void EmployeeList::print() {
-    std::cout << "Team Hierarchy:\n";
-    print(leader, 0);
+TeamleadWrapper &EmployeeList::getTeamlead() {
+    return teamlead;
 }

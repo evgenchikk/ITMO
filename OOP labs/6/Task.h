@@ -4,13 +4,12 @@
 #include <vector>
 #include <set>
 
-
 class Task {
 private:
-    size_t ID;
+    size_t Id;
     std::string name;
     std::string description;
-    int employeeID;
+    int employeeId;
     enum class Status {
         Open,
         Active,
@@ -21,26 +20,26 @@ private:
     std::vector<TimedPost *> comments;
     std::vector<TimedPost *> history;
 
-    std::set<size_t> editorsID;
+    std::set<size_t> editorsId;
 
     std::string statusString();
 
 public:
-    Task(size_t _ID, std::string _name, std::string _description, int _employeeID, size_t creatorID);
+    Task(size_t _Id, std::string _name, std::string _description, int _employeeId, size_t creatorId);
 
-    void addComment(std::string text, size_t editorID);
+    void addComment(std::string text, size_t editorId);
 
-    void assignEmployee(int newEmployeeID, size_t editorID);
+    void assignEmployee(int newEmployeeId, size_t editorId);
 
-    void changeStatus(int newStatus, size_t editorID);
+    void changeStatus(int newStatus, size_t editorId);
 
-    size_t getID();
+    size_t getId();
 
     const std::string &getName();
 
     const std::string &getDescription();
 
-    int getEmployeeID();
+    int getEmployeeId();
 
     std::string getStatus();
 
@@ -52,5 +51,5 @@ public:
 
     const std::vector<TimedPost *> &getHistory();
 
-    const std::set<size_t> &getEditorsID();
+    const std::set<size_t> &getEditorsId();
 };

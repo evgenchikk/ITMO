@@ -2,40 +2,29 @@
 
 #include "Task.h"
 
-
 class TaskList {
-    static const size_t PRINT_SIZE = 5;
-
     std::vector<Task *> list;
 
-    static bool IDComparator(Task *left, Task *right);
+    static bool IdComparator(Task *left, Task *right);
 
     static bool creationTimeComparator(Task *left, Task *right);
 
     static bool lastChangeTimeComparator(Task *left, Task *right);
 
-    enum class PrintType {
-        ID,
-        CreationDate,
-        LastChangeDate
-    };
-
-    static void print(std::vector<Task *> list, PrintType printType);
-
 public:
-    bool addTask(size_t ID, std::string name, std::string description, size_t employeeID, size_t creatorID);
+    bool addTask(size_t Id, std::string name, std::string description, size_t employeeId, size_t creatorId);
 
-    Task *getTask(size_t ID);
+    Task *getTask(size_t Id);
 
-    void printByID();
+    std::vector<Task *> *getSortedById();
 
-    void printByCreationTime();
+    std::vector<Task *> *getSortedByCreationTime();
 
-    void printByLastChangeTime();
+    std::vector<Task *> *getSortedByLastChangeTime();
 
-    void printAssigned(size_t employeeID);
+    std::vector<Task *> *getAssigned(size_t employeeId);
 
-    void printEdited(size_t employeeID);
+    std::vector<Task *> *getEdited(size_t employeeId);
 
-    void printSubordinated(std::vector<size_t> employeesID);
+    std::vector<Task *> *getSubordinated(const std::vector<size_t> &employeesId);
 };
